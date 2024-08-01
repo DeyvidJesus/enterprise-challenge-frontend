@@ -7,34 +7,42 @@ export const Learn: React.FC = () => {
   const [cookies,] = useCookies(['token']);
 
   const [formData, setFormData] = useState({
-    fullName: '',
+    nomeCompleto: '',
     email: '',
-    phone: '',
-    age: '',
-    techKnowledge: 'no'
+    telefone: '',
+    idade: '',
+    conheceProgramacao: false // Alterado para booleano
   });
 
   const [errors, setErrors] = useState({
-    fullName: '',
+    nomeCompleto: '',
     email: '',
-    phone: '',
-    age: ''
+    telefone: '',
+    idade: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    const { name, value, type } = e.target;
+
+    if (type === 'radio') {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value === 'yes'
+      }));
+    } else {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value
+      }));
+    }
   };
 
   const validate = () => {
-    const newErrors = { fullName: '', email: '', phone: '', age: '' };
+    const newErrors = { nomeCompleto: '', email: '', telefone: '', idade: '' };
     let isValid = true;
 
-    if (!formData.fullName) {
-      newErrors.fullName = 'Nome completo é obrigatório.';
+    if (!formData.nomeCompleto) {
+      newErrors.nomeCompleto = 'Nome completo é obrigatório.';
       isValid = false;
     }
 
@@ -46,19 +54,19 @@ export const Learn: React.FC = () => {
       isValid = false;
     }
 
-    if (!formData.phone) {
-      newErrors.phone = 'Telefone é obrigatório.';
+    if (!formData.telefone) {
+      newErrors.telefone = 'Telefone é obrigatório.';
       isValid = false;
-    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.phone)) {
-      newErrors.phone = 'Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
+    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.telefone)) {
+      newErrors.telefone = 'Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
       isValid = false;
     }
 
-    if (!formData.age) {
-      newErrors.age = 'Idade é obrigatória.';
+    if (!formData.idade) {
+      newErrors.idade = 'Idade é obrigatória.';
       isValid = false;
-    } else if (!/^\d+$/.test(formData.age)) {
-      newErrors.age = 'Idade deve ser um número.';
+    } else if (!/^\d+$/.test(formData.idade)) {
+      newErrors.idade = 'Idade deve ser um número.';
       isValid = false;
     }
 
@@ -83,7 +91,7 @@ export const Learn: React.FC = () => {
 
         if (response.ok) {
           toast.success('Cadastro realizado com sucesso!');
-          setFormData({ fullName: '', email: '', phone: '', age: '', techKnowledge: 'no' });
+          setFormData({ nomeCompleto: '', email: '', telefone: '', idade: '', conheceProgramacao: false });
         } else {
           console.error('Resposta do servidor:', response);
           toast.error('Falha ao enviar cadastro.');
@@ -104,11 +112,11 @@ export const Learn: React.FC = () => {
         <input
           className="w-2/3 p-2 rounded border-black border mb-2"
           type="text"
-          name="fullName"
-          value={formData.fullName}
+          name="nomeCompleto"
+          value={formData.nomeCompleto}
           onChange={handleChange}
         />
-        {errors.fullName && <span className="text-red-600 font-medium mb-1">{errors.fullName}</span>}
+        {errors.nomeCompleto && <span className="text-red-600 font-medium mb-1">{errors.nomeCompleto}</span>}
 
         <label className="font-medium w-2/3">Email:</label>
         <input
@@ -124,30 +132,30 @@ export const Learn: React.FC = () => {
         <input
           className="w-2/3 p-2 rounded border-black border mb-2"
           type="text"
-          name="phone"
-          value={formData.phone}
+          name="telefone"
+          value={formData.telefone}
           onChange={handleChange}
         />
-        {errors.phone && <span className="text-red-600 font-medium mb-1">{errors.phone}</span>}
+        {errors.telefone && <span className="text-red-600 font-medium mb-1">{errors.telefone}</span>}
 
         <label className="font-medium w-2/3">Idade:</label>
         <input
           className="w-2/3 p-2 rounded border-black border mb-2"
-          type="text"
-          name="age"
-          value={formData.age}
+          type="number"
+          name="idade"
+          value={formData.idade}
           onChange={handleChange}
         />
-        {errors.age && <span className="text-red-600 font-medium mb-1">{errors.age}</span>}
+        {errors.idade && <span className="text-red-600 font-medium mb-1">{errors.idade}</span>}
 
         <label className="font-medium">Possui conhecimentos em tecnologia?</label>
         <div className="flex mb-4">
           <label className="mr-4">
             <input
               type="radio"
-              name="techKnowledge"
+              name="conheceProgramacao"
               value="yes"
-              checked={formData.techKnowledge === 'yes'}
+              checked={formData.conheceProgramacao === true}
               onChange={handleChange}
               className='mr-2'
             />
@@ -156,9 +164,9 @@ export const Learn: React.FC = () => {
           <label>
             <input
               type="radio"
-              name="techKnowledge"
+              name="conheceProgramacao"
               value="no"
-              checked={formData.techKnowledge === 'no'}
+              checked={formData.conheceProgramacao === false}
               onChange={handleChange}
               className='mr-2'
             />
