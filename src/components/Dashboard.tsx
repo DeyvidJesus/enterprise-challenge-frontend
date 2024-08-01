@@ -2,18 +2,18 @@ import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 
 export function Dashboard() {
-  const [cookies, removeCookie] = useCookies(["token"])
+  const [cookies, , removeCookie] = useCookies(["token"]);
 
   useEffect(() => {
-    const cookieValue = cookies["token"];
-    if (!cookieValue) {
+    const token = cookies["token"];
+
+    if (!token) {
       window.location.assign("http://localhost:4200/");
     }
-  }, [])
+  }, [cookies]);
 
   function handleLogout() {
-    removeCookie("token", "");
-    window.location.assign("/");
+    removeCookie('token', { path: '/', domain: 'localhost' });
   }
 
   return (
