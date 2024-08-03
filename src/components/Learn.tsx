@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export const Learn: React.FC = () => {
-  const [cookies,] = useCookies(['token']);
-
   const [formData, setFormData] = useState({
     nomeCompleto: '',
     email: '',
-    telefone: '',
+    numeroCelular: '',
     idade: '',
-    conheceProgramacao: false // Alterado para booleano
+    conheceProgramacao: false 
   });
 
   const [errors, setErrors] = useState({
     nomeCompleto: '',
     email: '',
-    telefone: '',
+    numeroCelular: '',
     idade: ''
   });
 
@@ -38,7 +34,7 @@ export const Learn: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', telefone: '', idade: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', idade: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -54,19 +50,19 @@ export const Learn: React.FC = () => {
       isValid = false;
     }
 
-    if (!formData.telefone) {
-      newErrors.telefone = 'Telefone é obrigatório.';
+    if (!formData.numeroCelular) {
+      newErrors.numeroCelular = 'Número de celular é obrigatório.';
       isValid = false;
-    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.telefone)) {
-      newErrors.telefone = 'Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
+    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.numeroCelular)) {
+      newErrors.numeroCelular = 'Número de celular inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
       isValid = false;
     }
 
     if (!formData.idade) {
       newErrors.idade = 'Idade é obrigatória.';
       isValid = false;
-    } else if (!/^\d+$/.test(formData.idade)) {
-      newErrors.idade = 'Idade deve ser um número.';
+    } else if (!/^\d+$/.test(formData.idade) || +formData.idade < 1 || +formData.idade > 120) {
+      newErrors.idade = 'Idade deve ser um número entre 1 e 120.';
       isValid = false;
     }
 
@@ -78,12 +74,9 @@ export const Learn: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const token = cookies["token"];
-
-        const response = await fetch('http://localhost:8080/cadastros/alunos', {
+        const response = await fetch('http://localhost:8091/cadastros/alunos', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(formData)
@@ -91,7 +84,7 @@ export const Learn: React.FC = () => {
 
         if (response.ok) {
           toast.success('Cadastro realizado com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', telefone: '', idade: '', conheceProgramacao: false });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', idade: '', conheceProgramacao: false });
         } else {
           console.error('Resposta do servidor:', response);
           toast.error('Falha ao enviar cadastro.');
@@ -105,52 +98,52 @@ export const Learn: React.FC = () => {
 
   return (
     <div className='w-screen bg-cover py-10 flex justify-center h-full max-h-full max-w-full bg-[url(/images/background.jpg)]'>
-      <form className='w-1/2 h-3/4 justify-center items-center flex rounded flex-col border-2 border-black p-6 bg-gray-50 bg-opacity-70' onSubmit={handleSubmit}>
-        <h2 className="text-center font-semibold text-2xl mb-4">Cadastro de Alunos</h2>
+      <form className='w-full max-w-lg mx-4 md:w-1/2 h-auto flex flex-col justify-center items-center rounded border-2 border-black p-6 bg-gray-50 bg-opacity-70' onSubmit={handleSubmit}>
+        <h2 className="text-center font-semibold text-2xl mb-6">Cadastro de Alunos</h2>
 
-        <label className="font-medium w-2/3">Nome Completo:</label>
+        <label className="font-medium mb-1 w-full text-left">Nome Completo:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.nomeCompleto ? 'border-red-500' : ''}`}
           type="text"
           name="nomeCompleto"
           value={formData.nomeCompleto}
           onChange={handleChange}
         />
-        {errors.nomeCompleto && <span className="text-red-600 font-medium mb-1">{errors.nomeCompleto}</span>}
+        {errors.nomeCompleto && <span className="text-red-600 font-medium mb-2">{errors.nomeCompleto}</span>}
 
-        <label className="font-medium w-2/3">Email:</label>
+        <label className="font-medium mb-1 w-full text-left">Email:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.email ? 'border-red-500' : ''}`}
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
         />
-        {errors.email && <span className="text-red-600 font-medium mb-1">{errors.email}</span>}
+        {errors.email && <span className="text-red-600 font-medium mb-2">{errors.email}</span>}
 
-        <label className="font-medium w-2/3">Telefone:</label>
+        <label className="font-medium mb-1 w-full text-left">Telefone:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.numeroCelular ? 'border-red-500' : ''}`}
           type="text"
-          name="telefone"
-          value={formData.telefone}
+          name="numeroCelular"
+          value={formData.numeroCelular}
           onChange={handleChange}
         />
-        {errors.telefone && <span className="text-red-600 font-medium mb-1">{errors.telefone}</span>}
+        {errors.numeroCelular && <span className="text-red-600 font-medium mb-2">{errors.numeroCelular}</span>}
 
-        <label className="font-medium w-2/3">Idade:</label>
+        <label className="font-medium mb-1 w-full text-left">Idade:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.idade ? 'border-red-500' : ''}`}
           type="number"
           name="idade"
           value={formData.idade}
           onChange={handleChange}
         />
-        {errors.idade && <span className="text-red-600 font-medium mb-1">{errors.idade}</span>}
+        {errors.idade && <span className="text-red-600 font-medium mb-2">{errors.idade}</span>}
 
-        <label className="font-medium">Possui conhecimentos em tecnologia?</label>
-        <div className="flex mb-4">
-          <label className="mr-4">
+        <label className="font-medium mb-2 w-full text-left">Possui conhecimentos em tecnologia?</label>
+        <div className="flex mb-4 w-full">
+          <label className="mr-4 flex items-center">
             <input
               type="radio"
               name="conheceProgramacao"
@@ -161,7 +154,7 @@ export const Learn: React.FC = () => {
             />
             Sim
           </label>
-          <label>
+          <label className="flex items-center">
             <input
               type="radio"
               name="conheceProgramacao"
@@ -174,7 +167,7 @@ export const Learn: React.FC = () => {
           </label>
         </div>
 
-        <button className="w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
+        <button className="w-full bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>
     </div>
   );

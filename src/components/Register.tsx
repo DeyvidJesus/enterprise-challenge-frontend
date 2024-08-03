@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Register: React.FC = () => {
-  const [cookies,] = useCookies(["token"])
+  const [cookies] = useCookies(["token"]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ username?: string, password?: string }>({});
@@ -14,7 +13,7 @@ const Register: React.FC = () => {
     if (cookieValue) {
       window.location.assign("http://localhost:4200/dashboard");
     }
-  }, [])
+  }, [cookies]);
 
   const validate = (): boolean => {
     const newErrors: { username?: string, password?: string } = {};
@@ -46,29 +45,47 @@ const Register: React.FC = () => {
           },
           body: JSON.stringify({ nomeUsuario: username, senha: password })
         });
+
         if (response.ok) {
-          await response.json();
           toast.success('Usuário cadastrado com sucesso, faça login na sua conta.');
+          setUsername('');
+          setPassword('');
         } else {
-          toast.error('Não foi possível criar o usuário');
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Não foi possível criar o usuário');
         }
       } catch (error) {
         toast.error('O cadastro falhou');
       }
     }
-  };  
+  };
 
   return (
     <div className='w-screen bg-cover py-10 flex justify-center h-full max-h-full max-w-full bg-[url(/images/background.jpg)]'>
-      <form className='w-1/2 h-3/4 justify-center items-center flex rounded flex-col border-2 border-black p-6 bg-gray-50 bg-opacity-70' onSubmit={handleRegister}>
+      <form className='w-full mx-4 md:w-1/2 h-3/4 flex flex-col items-center rounded border-2 border-black p-6 bg-gray-50 bg-opacity-70' onSubmit={handleRegister}>
         <h2 className='text-center font-semibold text-2xl mb-4'>Cadastre-se</h2>
-        <label className='w-2/3 font-medium'>Nome de usuário:</label>
-        <input className=' w-2/3 p-2 rounded border-black border mb-2' type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        {errors.username && <span className="text-red-600 font-medium mb-1">{errors.username}</span>}
 
-        <label className='w-2/3 font-medium'>Senha:</label>
-        <input className='w-2/3 p-2 rounded border-black border mb-2' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        {errors.password && <span className="text-red-600 font-medium mb-1">{errors.password}</span>}
+        <label className='w-2/3 font-medium' htmlFor="username">Nome de usuário:</label>
+        <input
+          id="username"
+          className={`w-2/3 p-2 rounded border ${errors.username ? 'border-red-500' : 'border-black'} mb-2`}
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          aria-describedby="username-error"
+        />
+        {errors.username && <span id="username-error" className="text-red-600 font-medium mb-1">{errors.username}</span>}
+
+        <label className='w-2/3 font-medium' htmlFor="password">Senha:</label>
+        <input
+          id="password"
+          className={`w-2/3 p-2 rounded border ${errors.password ? 'border-red-500' : 'border-black'} mb-2`}
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          aria-describedby="password-error"
+        />
+        {errors.password && <span id="password-error" className="text-red-600 font-medium mb-1">{errors.password}</span>}
 
         <button className='w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4' type="submit">Registrar-se</button>
         <a href="/login" className='mt-3 font-semibold hover:underline'>Já possui conta? Entre!</a>

@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export const Volunteer: React.FC = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
-    // cpf: '',
+    nomeCompleto: '',
     email: '',
-    phone: '',
-    motivation: ''
+    numeroCelular: '',
+    motivacao: ''
   });
 
   const [errors, setErrors] = useState({
-    fullName: '',
-    // cpf: '',
+    nomeCompleto: '',
     email: '',
-    phone: '',
-    motivation: ''
+    numeroCelular: '',
+    motivacao: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,21 +25,13 @@ export const Volunteer: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { fullName: '', email: '', phone: '', motivation: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', motivacao: '' };
     let isValid = true;
 
-    if (!formData.fullName) {
-      newErrors.fullName = 'Nome completo é obrigatório.';
+    if (!formData.nomeCompleto) {
+      newErrors.nomeCompleto = 'Nome completo é obrigatório.';
       isValid = false;
     }
-
-    // if (!formData.cpf) {
-    //   newErrors.cpf = 'CPF é obrigatório.';
-    //   isValid = false;
-    // } else if (!/^\d{11}$/.test(formData.cpf)) {
-    //   newErrors.cpf = 'CPF deve ter 11 dígitos.';
-    //   isValid = false;
-    // }
 
     if (!formData.email) {
       newErrors.email = 'Email é obrigatório.';
@@ -52,16 +41,16 @@ export const Volunteer: React.FC = () => {
       isValid = false;
     }
 
-    if (!formData.phone) {
-      newErrors.phone = 'Telefone é obrigatório.';
+    if (!formData.numeroCelular) {
+      newErrors.numeroCelular = 'Telefone é obrigatório.';
       isValid = false;
-    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.phone)) {
-      newErrors.phone = 'Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
+    } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(formData.numeroCelular)) {
+      newErrors.numeroCelular = 'Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.';
       isValid = false;
     }
 
-    if (!formData.motivation) {
-      newErrors.motivation = 'Motivação é obrigatória.';
+    if (!formData.motivacao) {
+      newErrors.motivacao = 'Motivação é obrigatória.';
       isValid = false;
     }
 
@@ -76,16 +65,17 @@ export const Volunteer: React.FC = () => {
         const response = await fetch('http://localhost:8091/cadastros/voluntarios', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData)
         });
 
         if (response.ok) {
           toast.success('Inscrição realizada com sucesso!');
-          setFormData({ fullName: '', email: '', phone: '', motivation: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', motivacao: '' });
         } else {
-          toast.error('Falha ao enviar inscrição.');
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Falha ao enviar inscrição.');
         }
       } catch (error) {
         toast.error('Erro ao enviar inscrição.');
@@ -95,58 +85,59 @@ export const Volunteer: React.FC = () => {
 
   return (
     <div className='w-screen bg-cover py-10 flex justify-center h-full max-h-full max-w-full bg-[url(/images/background.jpg)]'>
-      <form className='w-1/2 h-full justify-center items-center flex rounded flex-col border-2 border-black p-6 bg-gray-50 bg-opacity-70' onSubmit={handleSubmit}>
+      <form
+        className='w-full mx-4 md:w-1/2 h-full flex flex-col items-center rounded border-2 border-black p-6 bg-gray-50 bg-opacity-70'
+        onSubmit={handleSubmit}
+      >
         <h2 className="text-center font-semibold text-2xl mb-4">Inscrição de Voluntários</h2>
 
-        <label className="font-medium w-2/3">Nome Completo:</label>
+        <label className="font-medium w-2/3" htmlFor="nomeCompleto">Nome Completo:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          id="nomeCompleto"
+          className={`w-2/3 p-2 rounded border ${errors.nomeCompleto ? 'border-red-500' : 'border-black'} mb-2`}
           type="text"
-          name="fullName"
-          value={formData.fullName}
+          name="nomeCompleto"
+          value={formData.nomeCompleto}
           onChange={handleChange}
+          aria-describedby="nomeCompleto-error"
         />
-        {errors.fullName && <span className="text-red-600 font-medium mb-1">{errors.fullName}</span>}
+        {errors.nomeCompleto && <span id="nomeCompleto-error" className="text-red-600 font-medium mb-1">{errors.nomeCompleto}</span>}
 
-        {/* <label className="font-medium w-2/3">CPF:</label>
+        <label className="font-medium w-2/3" htmlFor="email">Email:</label>
         <input
-          className="w-96 p-2 rounded border-black border mb-2"
-          type="text"
-          name="cpf"
-          value={formData.cpf}
-          onChange={handleChange}
-        />
-        {errors.cpf && <span className="text-red-600 font-medium mb-1">{errors.cpf}</span>} */}
-
-        <label className="font-medium w-2/3">Email:</label>
-        <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          id="email"
+          className={`w-2/3 p-2 rounded border ${errors.email ? 'border-red-500' : 'border-black'} mb-2`}
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
+          aria-describedby="email-error"
         />
-        {errors.email && <span className="text-red-600 font-medium mb-1">{errors.email}</span>}
+        {errors.email && <span id="email-error" className="text-red-600 font-medium mb-1">{errors.email}</span>}
 
-        <label className="font-medium w-2/3">Telefone:</label>
+        <label className="font-medium w-2/3" htmlFor="numeroCelular">Telefone:</label>
         <input
-          className="w-2/3 p-2 rounded border-black border mb-2"
+          id="numeroCelular"
+          className={`w-2/3 p-2 rounded border ${errors.numeroCelular ? 'border-red-500' : 'border-black'} mb-2`}
           type="text"
-          name="phone"
-          value={formData.phone}
+          name="numeroCelular"
+          value={formData.numeroCelular}
           onChange={handleChange}
+          aria-describedby="numeroCelular-error"
         />
-        {errors.phone && <span className="text-red-600 font-medium mb-1">{errors.phone}</span>}
+        {errors.numeroCelular && <span id="numeroCelular-error" className="text-red-600 font-medium mb-1">{errors.numeroCelular}</span>}
 
-        <label className="font-medium w-2/3">Motivação:</label>
+        <label className="font-medium w-2/3" htmlFor="motivacao">Motivação:</label>
         <textarea
-          className="w-2/3 p-2 rounded border-black border mb-2"
-          name="motivation"
+          id="motivacao"
+          className={`w-2/3 p-2 rounded border ${errors.motivacao ? 'border-red-500' : 'border-black'} mb-2`}
+          name="motivacao"
           rows={3}
-          value={formData.motivation}
+          value={formData.motivacao}
           onChange={handleChange}
+          aria-describedby="motivacao-error"
         />
-        {errors.motivation && <span className="text-red-600 font-medium mb-1">{errors.motivation}</span>}
+        {errors.motivacao && <span id="motivacao-error" className="text-red-600 font-medium mb-1">{errors.motivacao}</span>}
 
         <button className="w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>
