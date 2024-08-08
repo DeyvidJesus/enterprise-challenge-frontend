@@ -38,7 +38,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/usuario/', {
+        const response = await fetch('http://localhost:8091/usuarios/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
