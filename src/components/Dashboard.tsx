@@ -39,9 +39,18 @@ export function Dashboard() {
     async function getData() {
       try {
         const [voluntariosResponse, alunosResponse, contatosResponse] = await Promise.all([
-          fetch('http://localhost:8091/cadastros/voluntarios'),
-          fetch('http://localhost:8091/cadastros/alunos'),
-          fetch('http://localhost:8091/cadastros/contatos')
+          fetch('http://localhost:8091/cadastros/voluntarios', { method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          }}),
+          fetch('http://localhost:8091/cadastros/alunos', { method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          }}),
+          fetch('http://localhost:8091/cadastros/contatos', { method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          }})
         ]);
 
         if (voluntariosResponse.ok && alunosResponse.ok && contatosResponse.ok) {
