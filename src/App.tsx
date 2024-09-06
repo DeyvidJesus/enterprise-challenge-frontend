@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import { Dashboard } from './components/Dashboard';
-import { Home } from './components/Home';
+import { Home } from './pages/Home';
 import { Header } from './components/Header';
-import { AboutUs } from './components/AboutUs';
-import { ContactUs } from './components/ContactUs';
-import { Learn } from './components/Learn';
+import { AboutUs } from './pages/AboutUs';
+import { ContactUs } from './pages/ContactUs';
+import { Learn } from './pages/Learn';
 import { ToastContainer } from 'react-toastify';
-import { Volunteer } from './components/Volunteer';
+import { Volunteer } from './pages/Volunteer';
 
 import "./styles/global.css";
 import 'react-toastify/dist/ReactToastify.css';
