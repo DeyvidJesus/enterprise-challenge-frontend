@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Login from './pages/Login';
-import Register from './pages/Register';
+// import Register from './pages/Register';
 import { Dashboard } from './components/Dashboard';
 import { Home } from './pages/Home';
 import { Header } from './components/Header';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
           <Route path="/aprenda" element={<Learn />} />
           <Route path="/seja-voluntario" element={<Volunteer />} />
           <Route path="/contato" element={<ContactUs />} />
-          <Route path="/register" element={<Register />} />
+          {/* <Route path="/register" element={<Register />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </main>

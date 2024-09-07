@@ -43,7 +43,7 @@ const Login: React.FC = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ nomeUsuario: username, senha: password })
+          body: JSON.stringify({ nomeUsuario: username, senha: password, role: "ADMIN" })
         });
 
         if (response.ok) {
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
         {errors.password && <span id="password-error" className="text-red-600 font-medium mb-1">{errors.password}</span>}
 
         <button className='bg-green-700 w-2/3 p-2 text-white font-medium rounded hover:bg-green-600 mt-4' type="submit">Entrar</button>
-        <a href="/register" className='mt-3 font-semibold hover:underline'>Não possui conta ainda? Cadastre-se já!</a>
+        {/* <a href="/register" className='mt-3 font-semibold hover:underline'>Não possui conta ainda? Cadastre-se já!</a> */}
       </form>
     </div>
   );

@@ -9,7 +9,7 @@ interface Pessoa {
 export interface Voluntario extends Pessoa {
   id: string;
   motivacao: string;
-  oficinas?: Oficina[]; // Adicionado para associar oficinas aos voluntários
+  oficinas?: Oficina[];
 }
 
 export interface Aluno extends Pessoa {
@@ -23,7 +23,6 @@ export interface Contato extends Pessoa {
   criticaSugestao: string;
 }
 
-// Novo tipo
 export interface Oficina {
   id: string;
   nome: string;

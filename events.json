@@ -1,0 +1,54 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Início das oficinas",
+      "start": "2024-09-10T20:00:00",
+      "end": "2024-09-10T22:00:00"
+    },
+    {
+      "id": "2",
+      "title": "Oficina: Computação Básica - Conceitos Iniciais",
+      "start": "2024-09-16T18:00:00",
+      "end": "2024-09-16T19:30:00"
+    },
+    {
+      "id": "3",
+      "title": "Oficina: Desenvolvimento de games - Pressionando o Start",
+      "start": "2024-09-13T10:00:00",
+      "end": "2024-09-13T11:30:00"
+    },
+    {
+      "id": "1725657965324",
+      "title": "Evento exemplo",
+      "start": "2024-09-06T20:30",
+      "allDay": false
+    }
+  ],
+  "oficinas": [
+    {
+      "id": "1",
+      "nome": "Computação Básica - Conceitos Iniciais",
+      "descricao": "Introdução aos conceitos básicos de computação.",
+      "data": "2024-09-16T18:00:00"
+    },
+    {
+      "id": "2",
+      "nome": "Desenvolvimento de games - Pressionando o Start",
+      "descricao": "Aprenda a criar seu primeiro jogo.",
+      "data": "2024-09-13T10:00:00"
+    },
+    {
+      "id": "3",
+      "nome": "Design Gráfico - Ferramentas e Técnicas",
+      "descricao": "Introdução às ferramentas e técnicas de design gráfico.",
+      "data": "2024-09-20T14:00:00"
+    },
+    {
+      "id": "4",
+      "nome": "Desenvolvimento Web - HTML e CSS",
+      "descricao": "Aprenda a criar páginas web usando HTML e CSS.",
+      "data": "2024-09-25T16:00:00"
+    }
+  ]
+}
