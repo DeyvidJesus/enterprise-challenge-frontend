@@ -12,8 +12,6 @@ export function Dashboard() {
   const [userEmail, setUserEmail] = useState<string>('');
   const [horarios, setHorarios] = useState<any[]>([]);
 
-  const oficinaObj: any = null;
-
   useEffect(() => {
     const token = cookies["token"];
     const emailFromCookie = cookies["email"];
@@ -54,15 +52,11 @@ export function Dashboard() {
 
           let horario = response.horarios.split(",");
 
-          console.log("horario", horario)
-
           let dias = horario[0].split("/");
           let horas = horario[1];
           let horariosAulas: any[] = [];
 
           dias.forEach((d: string) => horariosAulas.push({dia: d, hora: horas}));
-
-          console.log("horarios", horariosAulas);
 
           setHorarios(horariosAulas);
 
