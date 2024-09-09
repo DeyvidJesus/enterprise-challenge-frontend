@@ -26,7 +26,7 @@ export function AboutUs() {
         <li className="text-blue-900 font-medium my-1">Michelle Sayuri Ueta - RM: 558737</li>
       </ul>
 
-      <p className="text-blue-800 font-medium mt-4">Mês/Ano de desenvolvimento: Março/2024</p>
+      <p className="text-blue-800 font-medium mt-4">Mês/Ano de desenvolvimento: Setembro/2024</p>
     </div>
   )
 }
