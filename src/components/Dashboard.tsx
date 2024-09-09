@@ -136,7 +136,7 @@ export function Dashboard() {
                       {horario.dia === 'SEX' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
-                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                      {/* <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td> */}
                     </tr>
                   </>
                 ))}
