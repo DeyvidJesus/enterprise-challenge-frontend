@@ -82,6 +82,8 @@ export function Dashboard() {
   }, [cookies, userRole]);
 
   return (
+
+  
     <div className="flex flex-col p-6 bg-gray-100 w-screen max-w-full">
       {userRole === "ROLE_ALUNO" && (
         <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
@@ -92,6 +94,11 @@ export function Dashboard() {
         <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
           Dashboard Voluntário
         </h1>
+      )}
+      {userRole === "ROLE_CONTATO" && (
+        <div>
+          
+        </div>
       )}
       {(userRole === "ROLE_ALUNO" || userRole === "ROLE_VOLUNTARIO") && (
         <>

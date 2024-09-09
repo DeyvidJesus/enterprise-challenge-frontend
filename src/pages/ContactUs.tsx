@@ -7,7 +7,8 @@ export const ContactUs: React.FC = () => {
     email: '',
     numeroCelular: '',
     criticaSugestao: '',
-    senha: ''
+    senha: '',
+    roleId: 3
   });
 
   const [errors, setErrors] = useState({
@@ -15,7 +16,8 @@ export const ContactUs: React.FC = () => {
     email: '',
     numeroCelular: '',
     criticaSugestao: '',
-    senha: ''
+    senha: '',
+    roleId: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,7 +29,7 @@ export const ContactUs: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '', roleId: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -81,7 +83,7 @@ export const ContactUs: React.FC = () => {
 
         if (response.ok) {
           toast.success('Cadastro realizado com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '', roleId: 3 });
         } else {
           console.error('Resposta do servidor:', response);
           toast.error('Falha ao enviar cadastro.');
@@ -150,15 +152,18 @@ export const ContactUs: React.FC = () => {
         />
         {errors.criticaSugestao && <span id="criticaSugestao-error" className="text-red-600 font-medium mb-1" role="alert">{errors.criticaSugestao}</span>}
 
-        <label className="font-medium mb-1 w-full text-left">Senha:</label>
+        <label htmlFor="senha" className="font-medium w-2/3">Senha:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.senha ? 'border-red-500' : ''}`}
+          id="senha"
+          className="w-2/3 p-2 rounded border-black border mb-2"
           type="text"
           name="senha"
           value={formData.senha}
           onChange={handleChange}
+          aria-describedby="senha-error"
         />
-        {errors.senha && <span className="text-red-600 font-medium mb-2">{errors.senha}</span>}
+        {errors.senha && <span id="senha-error" className="text-red-600 font-medium mb-1" role="alert">{errors.senha}</span>}
+
         
         <button className="w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>

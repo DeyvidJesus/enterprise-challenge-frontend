@@ -8,7 +8,8 @@ export const Volunteer: React.FC = () => {
     numeroCelular: '',
     motivacao: '',
     oficinaId: '',
-    senha: ''
+    senha: '', 
+    roleId: 2
   });
 
   const [errors, setErrors] = useState({
@@ -17,7 +18,8 @@ export const Volunteer: React.FC = () => {
     numeroCelular: '',
     motivacao: '',
     oficinaId: '',
-    senha: ''
+    senha: '',
+    roleId: ''
   });
 
   const [oficinas, setOficinas] = useState([]);
@@ -47,7 +49,7 @@ export const Volunteer: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '', roleId: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -106,7 +108,7 @@ export const Volunteer: React.FC = () => {
 
         if (response.ok) {
           toast.success('Inscrição realizada com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '', roleId: 2 });
         } else {
           const errorData = await response.json();
           toast.error(errorData.message || 'Falha ao enviar inscrição.');

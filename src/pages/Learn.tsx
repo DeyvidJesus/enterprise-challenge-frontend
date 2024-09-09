@@ -134,7 +134,7 @@ export const Learn: React.FC = () => {
 
         <label className="font-medium mb-1 w-full text-left">Nome Completo:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.nomeCompleto ? 'border-red-500' : ''}`}
+          className={`w-full p-2 rounded border ${errors.nomeCompleto ? 'border-red-500' : 'border-black'} mb-2`}
           type="text"
           name="nomeCompleto"
           value={formData.nomeCompleto}
@@ -144,7 +144,7 @@ export const Learn: React.FC = () => {
 
         <label className="font-medium mb-1 w-full text-left">Email:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.email ? 'border-red-500' : ''}`}
+          className={`w-full p-2 rounded border ${errors.email ? 'border-red-500' : 'border-black'} mb-2`}
           type="email"
           name="email"
           value={formData.email}
@@ -154,7 +154,7 @@ export const Learn: React.FC = () => {
 
         <label className="font-medium mb-1 w-full text-left">Telefone:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.numeroCelular ? 'border-red-500' : ''}`}
+          className={`w-full p-2 rounded border ${errors.numeroCelular ? 'border-red-500' : 'border-black'} mb-2`}
           type="text"
           name="numeroCelular"
           value={formData.numeroCelular}
@@ -164,7 +164,7 @@ export const Learn: React.FC = () => {
 
         <label className="font-medium mb-1 w-full text-left">Idade:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.idade ? 'border-red-500' : ''}`}
+          className={`w-full p-2 rounded border ${errors.idade ? 'border-red-500' : 'border-black'} mb-2`}
           type="number"
           name="idade"
           value={formData.idade}
@@ -201,7 +201,7 @@ export const Learn: React.FC = () => {
         {/* Seção do select para oficinas */}
         <label className="font-medium mb-1 w-full text-left">Selecione uma Oficina:</label>
         <select
-          className="w-full p-2 rounded border border-gray-300 mb-2"
+          className={`w-full p-2 rounded border ${errors.senha ? 'border-red-500' : 'border-black'} mb-2`}
           name="oficinaId"
           value={formData.oficinaId}
           onChange={handleChange}
@@ -216,7 +216,7 @@ export const Learn: React.FC = () => {
 
         <label className="font-medium mb-1 w-full text-left">Senha:</label>
         <input
-          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.senha ? 'border-red-500' : ''}`}
+          className={`w-full p-2 rounded border ${errors.senha ? 'border-red-500' : 'border-black'} mb-2`}
           type="text"
           name="senha"
           value={formData.senha}
