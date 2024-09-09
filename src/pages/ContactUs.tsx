@@ -6,14 +6,16 @@ export const ContactUs: React.FC = () => {
     nomeCompleto: '',
     email: '',
     numeroCelular: '',
-    criticaSugestao: ''
+    criticaSugestao: '',
+    senha: ''
   });
 
   const [errors, setErrors] = useState({
     nomeCompleto: '',
     email: '',
     numeroCelular: '',
-    criticaSugestao: ''
+    criticaSugestao: '',
+    senha: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -25,7 +27,7 @@ export const ContactUs: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -54,6 +56,13 @@ export const ContactUs: React.FC = () => {
       isValid = false;
     }
 
+    if (!formData.senha) {
+      newErrors.senha = 'Senha é obrigatória.';
+      isValid = false;
+    } else if (formData.senha.length < 6) {
+      newErrors.senha = 'A senha deve ter ao menos 6 caracteres.';
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -62,7 +71,7 @@ export const ContactUs: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/cadastros/contatos', {
+        const response = await fetch('http://localhost:8091/contatos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -72,7 +81,7 @@ export const ContactUs: React.FC = () => {
 
         if (response.ok) {
           toast.success('Cadastro realizado com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', criticaSugestao: '', senha: '' });
         } else {
           console.error('Resposta do servidor:', response);
           toast.error('Falha ao enviar cadastro.');
@@ -141,6 +150,16 @@ export const ContactUs: React.FC = () => {
         />
         {errors.criticaSugestao && <span id="criticaSugestao-error" className="text-red-600 font-medium mb-1" role="alert">{errors.criticaSugestao}</span>}
 
+        <label className="font-medium mb-1 w-full text-left">Senha:</label>
+        <input
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.senha ? 'border-red-500' : ''}`}
+          type="text"
+          name="senha"
+          value={formData.senha}
+          onChange={handleChange}
+        />
+        {errors.senha && <span className="text-red-600 font-medium mb-2">{errors.senha}</span>}
+        
         <button className="w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>
     </div>

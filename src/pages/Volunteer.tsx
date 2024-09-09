@@ -7,14 +7,17 @@ export const Volunteer: React.FC = () => {
     email: '',
     numeroCelular: '',
     motivacao: '',
-    oficinaSelecionada: ''
+    oficinaId: '',
+    senha: ''
   });
 
   const [errors, setErrors] = useState({
     nomeCompleto: '',
     email: '',
     numeroCelular: '',
-    motivacao: ''
+    motivacao: '',
+    oficinaId: '',
+    senha: ''
   });
 
   const [oficinas, setOficinas] = useState([]);
@@ -22,8 +25,9 @@ export const Volunteer: React.FC = () => {
   useEffect(() => {
     const fetchOficinas = async () => {
       try {
-        const response = await fetch('http://localhost:3000/oficinas');
+        const response = await fetch('http://localhost:8091/oficinas');
         const data = await response.json();
+        console.log("oficinas", data);
         setOficinas(data);
       } catch (error) {
         console.error('Erro ao buscar oficinas:', error);
@@ -43,7 +47,7 @@ export const Volunteer: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', motivacao: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -72,6 +76,18 @@ export const Volunteer: React.FC = () => {
       isValid = false;
     }
 
+    if (!formData.oficinaId) {
+      newErrors.oficinaId = 'Oficina é obrigatória.';
+      isValid = false;
+    }
+
+    if (!formData.senha) {
+      newErrors.senha = 'Senha é obrigatória.';
+      isValid = false;
+    } else if (formData.senha.length < 6) {
+      newErrors.senha = 'A senha deve ter ao menos 6 caracteres.';
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -80,7 +96,7 @@ export const Volunteer: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/cadastros/voluntarios', {
+        const response = await fetch('http://localhost:8091/voluntarios', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +106,7 @@ export const Volunteer: React.FC = () => {
 
         if (response.ok) {
           toast.success('Inscrição realizada com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaSelecionada: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', motivacao: '', oficinaId: '', senha: '' });
         } else {
           const errorData = await response.json();
           toast.error(errorData.message || 'Falha ao enviar inscrição.');
@@ -158,21 +174,33 @@ export const Volunteer: React.FC = () => {
         {errors.motivacao && <span id="motivacao-error" className="text-red-600 font-medium mb-1">{errors.motivacao}</span>}
 
         {/* Seção do select para oficinas */}
-        <label className="font-medium w-2/3" htmlFor="oficinaSelecionada">Selecione uma Oficina:</label>
+        <label className="font-medium w-2/3" htmlFor="oficinaId">Selecione uma Oficina:</label>
         <select
-          id="oficinaSelecionada"
+          id="oficinaId"
           className="w-2/3 p-2 rounded border border-black mb-2"
-          name="oficinaSelecionada"
-          value={formData.oficinaSelecionada}
+          name="oficinaId"
+          value={formData.oficinaId}
           onChange={handleChange}
         >
           <option value="">Selecione uma oficina</option>
           {oficinas.map((oficina: any) => (
-            <option key={oficina.id} value={oficina.id}>
-              {oficina.nome}
+            <option key={oficina.id} value={oficina.nomeOficina}>
+              {oficina.nomeOficina} - {oficina.horarios}
             </option>
           ))}
         </select>
+
+        <label className="font-medium w-2/3" htmlFor="senha">Senha:</label>
+        <input
+          id="senha"
+          className={`w-2/3 p-2 rounded border ${errors.senha ? 'border-red-500' : 'border-black'} mb-2`}
+          type="text"
+          name="senha"
+          value={formData.senha}
+          onChange={handleChange}
+          aria-describedby="senha-error"
+        />
+        {errors.senha && <span id="senha-error" className="text-red-600 font-medium mb-1">{errors.senha}</span>}
 
         <button className="w-2/3 bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>

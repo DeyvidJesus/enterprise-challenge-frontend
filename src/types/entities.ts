@@ -24,11 +24,7 @@ export interface Contato extends Pessoa {
 }
 
 export interface Oficina {
-  id: string;
-  nome: string;
-  descricao: string;
-  dataInicio: string;
-  dataFim: string;
-  alunos?: string[];
-  voluntarios?: string[];
+  id: number;
+  nomeOficina: string;
+  horarios: string;
 }

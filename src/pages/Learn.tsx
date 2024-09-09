@@ -8,14 +8,20 @@ export const Learn: React.FC = () => {
     numeroCelular: '',
     idade: '',
     conheceProgramacao: false,
-    oficinaSelecionada: ''
+    oficinaId: '',
+    senha: '',
+    roleId: 1
   });
 
   const [errors, setErrors] = useState({
     nomeCompleto: '',
     email: '',
     numeroCelular: '',
-    idade: ''
+    idade: '',
+    conheceProgramacao: '',
+    oficinaId: '',
+    senha: '',
+    roleId: ''
   });
 
   const [oficinas, setOficinas] = useState([]);
@@ -23,7 +29,7 @@ export const Learn: React.FC = () => {
   useEffect(() => {
     const fetchOficinas = async () => {
       try {
-        const response = await fetch('http://localhost:3000/oficinas');
+        const response = await fetch('http://localhost:8091/oficinas');
         const data = await response.json();
         setOficinas(data);
       } catch (error) {
@@ -52,7 +58,7 @@ export const Learn: React.FC = () => {
   };
 
   const validate = () => {
-    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', idade: '' };
+    const newErrors = { nomeCompleto: '', email: '', numeroCelular: '', idade: '', conheceProgramacao: '', oficinaId: '', senha: '', roleId: '' };
     let isValid = true;
 
     if (!formData.nomeCompleto) {
@@ -84,6 +90,13 @@ export const Learn: React.FC = () => {
       isValid = false;
     }
 
+    if (!formData.senha) {
+      newErrors.senha = 'Senha é obrigatória.';
+      isValid = false;
+    } else if (formData.senha.length < 6) {
+      newErrors.senha = 'A senha deve ter ao menos 6 caracteres.';
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -92,7 +105,7 @@ export const Learn: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/cadastros/alunos', {
+        const response = await fetch('http://localhost:8091/alunos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -102,7 +115,7 @@ export const Learn: React.FC = () => {
 
         if (response.ok) {
           toast.success('Cadastro realizado com sucesso!');
-          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', idade: '', conheceProgramacao: false, oficinaSelecionada: '' });
+          setFormData({ nomeCompleto: '', email: '', numeroCelular: '', idade: '', conheceProgramacao: false, oficinaId: '', senha: '', roleId: 1 });
         } else {
           console.error('Resposta do servidor:', response);
           toast.error('Falha ao enviar cadastro.');
@@ -189,17 +202,27 @@ export const Learn: React.FC = () => {
         <label className="font-medium mb-1 w-full text-left">Selecione uma Oficina:</label>
         <select
           className="w-full p-2 rounded border border-gray-300 mb-2"
-          name="oficinaSelecionada"
-          value={formData.oficinaSelecionada}
+          name="oficinaId"
+          value={formData.oficinaId}
           onChange={handleChange}
         >
           <option value="">Selecione uma oficina</option>
           {oficinas.map((oficina: any) => (
             <option key={oficina.id} value={oficina.id}>
-              {oficina.nome}
+              {oficina.nomeOficina} - {oficina.horarios}
             </option>
           ))}
         </select>
+
+        <label className="font-medium mb-1 w-full text-left">Senha:</label>
+        <input
+          className={`w-full p-2 rounded border border-gray-300 mb-2 ${errors.senha ? 'border-red-500' : ''}`}
+          type="text"
+          name="senha"
+          value={formData.senha}
+          onChange={handleChange}
+        />
+        {errors.senha && <span className="text-red-600 font-medium mb-2">{errors.senha}</span>}
 
         <button className="w-full bg-green-700 p-2 text-white font-medium rounded hover:bg-green-600 mt-4" type="submit">Enviar</button>
       </form>

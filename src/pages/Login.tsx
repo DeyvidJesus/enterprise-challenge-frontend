@@ -3,17 +3,33 @@ import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
-  const [cookies, setCookie] = useCookies(['token']);
+  const [cookiesToken, setCookieToken] = useCookies(['token']);
+  const [cookiesRole, setCookieRole] = useCookies(['role']);
+  const [cookiesEmail, setCookieEmail] = useCookies(['email']);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ username?: string, password?: string }>({});
 
   useEffect(() => {
-    const cookieValue = cookies["token"];
+    const cookieValue = cookiesToken["token"];
     if (cookieValue) {
       window.location.assign("http://localhost:4200/dashboard");
     }
-  }, [cookies]);
+  }, [cookiesToken]);
+
+  useEffect(() => {
+    const cookieValue = cookiesRole["role"];
+    if (cookieValue) {
+      window.location.assign("http://localhost:4200/dashboard");
+    }
+  }, [cookiesRole]);
+
+  useEffect(() => {
+    const cookieValue = cookiesEmail["email"];
+    if (cookieValue) {
+      window.location.assign("http://localhost:4200/dashboard");
+    }
+  }, [cookiesEmail]);
 
   const validate = (): boolean => {
     const newErrors: { username?: string, password?: string } = {};
@@ -43,12 +59,14 @@ const Login: React.FC = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ nomeUsuario: username, senha: password, role: "ADMIN" })
+          body: JSON.stringify({ nomeUsuario: username, senha: password })
         });
 
         if (response.ok) {
           const data = await response.json();
-          setCookie('token', data.token, { path: '/' });
+          setCookieToken('token', data.token, { path: '/' });
+          setCookieRole('role', data.role, { path: '/'})
+          setCookieEmail('email', username, { path: '/'})
           window.location.assign("http://localhost:4200/dashboard");
         } else {
           const errorData = await response.json();

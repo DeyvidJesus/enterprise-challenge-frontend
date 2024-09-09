@@ -1,174 +1,139 @@
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { Voluntario, Aluno, Contato
-  // , Oficina 
-} from "../types/entities";
+import { Oficina } from "../types/entities";
 import Calendar from "./Calendar";
 
 export function Dashboard() {
-  const [cookies] = useCookies(["token", "userRole"]);
-  const [voluntarios, setVoluntarios] = useState<Voluntario[]>([]);
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [contatos, setContatos] = useState<Contato[]>([]);
-  // const [oficinas, setOficinas] = useState<Oficina[]>([]);
-  const [userRole, ] = useState<string>('admin');
+
+  const [cookies] = useCookies(["token", "role", "email"]);
+  const [oficina, setOficina] = useState<Oficina>({ id: -1, nomeOficina: '', horarios: ''});
+  const [userRole, setUserRole] = useState<string>('admin');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [horarios, setHorarios] = useState<any[]>([]);
+
+  const oficinaObj: any = null;
 
   useEffect(() => {
     const token = cookies["token"];
-    // const roleFromCookie = cookies["userRole"];
+    const emailFromCookie = cookies["email"];
 
     if (!token) {
       window.location.assign("http://localhost:4200/");
     }
 
-    // if (roleFromCookie) {
-    //   setUserRole(roleFromCookie);
-    // }
+    if (emailFromCookie) {
+      setUserEmail(emailFromCookie);
+    }
 
-    async function getData() {
+  }, [cookies, userEmail]);
+
+  useEffect(() => {
+    const token = cookies["token"];
+    const roleFromCookie = cookies["role"];
+    const emailFromCookie = cookies["email"];
+
+    if (!token) {
+      window.location.assign("http://localhost:4200/");
+    }
+
+    if (roleFromCookie) {
+      setUserRole(roleFromCookie);
+    }
+
+    async function getData(emailFromCookie: string, roleFromCookie: string) {
       try {
-        const [voluntariosResponse, alunosResponse, contatosResponse
-          // , oficinasResponse
-        ] = await Promise.all([
-          fetch('http://localhost:8091/cadastros/voluntarios', {
+        const [oficinasResponse] = await Promise.all([
+          fetch('http://localhost:8091/oficinas-por-usuario/' + encodeURI(emailFromCookie) + '?role=' + roleFromCookie, {
             method: 'GET',
             headers: {
-              'Authorization': 'Bearer ' + token,
-            }
-          }),
-          fetch('http://localhost:8091/cadastros/alunos', {
-            method: 'GET',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-            }
-          }),
-          fetch('http://localhost:8091/cadastros/contatos', {
-            method: 'GET',
-            headers: {
-              'Authorization': 'Bearer ' + token,
+              'Authorization': 'Bearer ' + token
             }
           })
-          // fetch('http://localhost:8091/oficinas', {
-          //   method: 'GET',
-          //   headers: {
-          //     'Authorization': 'Bearer ' + token,
-          //   }
-          // })
         ]);
 
-        if (voluntariosResponse.ok && alunosResponse.ok && contatosResponse.ok 
-          // && oficinasResponse.ok
-        ) {
-          setVoluntarios(await voluntariosResponse.json());
-          setAlunos(await alunosResponse.json());
-          setContatos(await contatosResponse.json());
-          // setOficinas(await oficinasResponse.json());
+        if (oficinasResponse.ok) {
+
+          var response = await oficinasResponse.json();
+
+          let horario = response.horarios.split(",");
+
+          console.log("horario", horario)
+
+          let dias = horario[0].split("/");
+          let horas = horario[1];
+          let horariosAulas: any[] = [];
+
+          dias.forEach((d: string) => horariosAulas.push({dia: d, hora: horas}));
+
+          console.log("horarios", horariosAulas);
+
+          setHorarios(horariosAulas);
+
+          setOficina(response);
+
         } else {
           toast.error('Falha ao carregar os dados.');
         }
       } catch (error) {
+        console.log(error);
         toast.error('Erro ao carregar os dados.');
       }
     }
 
-    if (userRole === 'admin') {
-      getData();
+    if (roleFromCookie === 'ROLE_ALUNO' || roleFromCookie === 'ROLE_VOLUNTARIO') {
+      getData(emailFromCookie, roleFromCookie);
     }
+
   }, [cookies, userRole]);
-
-  // const getOficinasForAluno = (alunoId: string) => {
-  //   return oficinas.filter(oficina => oficina.alunos?.includes(alunoId));
-  // };
-
-  // const getOficinasForVoluntario = (voluntarioId: string) => {
-  //   return oficinas.filter(oficina => oficina.voluntarios?.includes(voluntarioId));
-  // };
 
   return (
     <div className="flex flex-col p-6 bg-gray-100 w-screen max-w-full">
-      <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
-        Dashboard {userRole === "admin" && "Administrador"}
-      </h1>
-
-      <Calendar />
-      {userRole === "admin" && (
+      {userRole === "ROLE_ALUNO" && (
+        <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
+          Dashboard Aluno
+        </h1>
+      )}
+      {userRole === "ROLE_VOLUNTARIO" && (
+        <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
+          Dashboard Voluntário
+        </h1>
+      )}
+      {(userRole === "ROLE_ALUNO" || userRole === "ROLE_VOLUNTARIO") && (
         <>
           <div className="mb-10 overflow-auto" aria-labelledby="voluntarios-section">
-            <h2 id="voluntarios-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>Voluntários</h2>
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" aria-label="Tabela de Voluntários">
+            <h2 id="voluntarios-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>Tabela de Horários</h2>
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" aria-label="Tabela de Horários">
               <thead className="bg-gray-200 text-gray-600">
                 <tr>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Nome Completo</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Telefone</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Motivação</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Oficinas</th>
+                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Segunda</th>
+                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Terça</th>
+                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Quarta</th>
+                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Quinta</th>
+                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Sexta</th>
+
                 </tr>
               </thead>
               <tbody>
-                {voluntarios.map((voluntario, index) => (
-                  <tr key={index} className="hover:bg-gray-100">
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{voluntario.nomeCompleto}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{voluntario.email}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{voluntario.numeroCelular}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{voluntario.motivacao}</td>
-                    {/* <td className="py-2 px-4 border-b text-center whitespace-nowrap">
-                      {getOficinasForVoluntario(voluntario.id).map(oficina => oficina.nome).join(', ')}
-                    </td> */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mb-10 overflow-auto" aria-labelledby="contatos-section">
-            <h2 id="contatos-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>Contatos</h2>
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" aria-label="Tabela de Contatos">
-              <thead className="bg-gray-200 text-gray-600">
-                <tr>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Nome Completo</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Telefone</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Mensagem</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contatos.map((contato, index) => (
-                  <tr key={index} className="hover:bg-gray-100">
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{contato.nomeCompleto}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{contato.numeroCelular}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{contato.email}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{contato.criticaSugestao}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mb-10 overflow-auto" aria-labelledby="alunos-section">
-            <h2 id="alunos-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>Alunos</h2>
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" aria-label="Tabela de Alunos">
-              <thead className="bg-gray-200 text-gray-600">
-                <tr>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Nome Completo</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Telefone</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Email</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Idade</th>
-                  <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Conhece Programação</th>
-                  {/* <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Oficinas</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {alunos.map((aluno, index) => (
-                  <tr key={index} className="hover:bg-gray-100">
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{aluno.nomeCompleto}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{aluno.numeroCelular}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{aluno.email}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{aluno.idade}</td>
-                    <td className="py-2 px-4 border-b text-center whitespace-nowrap">{aluno.conheceProgramacao ? 'Sim' : 'Não'}</td>
-                    {/* <td className="py-2 px-4 border-b text-center whitespace-nowrap">
-                      {getOficinasForAluno(aluno.id).map(oficina => oficina.nome).join(', ')}
-                    </td> */}
-                  </tr>
+                {horarios.map((horario, index) => (
+                  <><tr key={index} className="hover:bg-gray-100">
+                      {horario.dia === "SEG" && (
+                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
+                      )}
+                      {horario.dia === "TER" && (
+                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
+                      )}
+                      {horario.dia === "QUA" && (
+                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
+                      )}
+                      {horario.dia === "QUI" && (
+                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
+                      )}
+                      {horario.dia === "SEX" && (
+                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
+                      )}
+                    </tr>
+                  </>
                 ))}
               </tbody>
             </table>
