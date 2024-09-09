@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { Oficina } from "../types/entities";
-import Calendar from "./Calendar";
 
 export function Dashboard() {
 
