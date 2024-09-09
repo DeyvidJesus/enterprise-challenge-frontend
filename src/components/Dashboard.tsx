@@ -37,10 +37,6 @@ export function Dashboard() {
       window.location.assign("http://localhost:4200/");
     }
 
-    if (roleFromCookie) {
-      setUserRole(roleFromCookie);
-    }
-
     async function getData(emailFromCookie: string, roleFromCookie: string) {
       try {
         const [oficinasResponse] = await Promise.all([
@@ -85,6 +81,10 @@ export function Dashboard() {
       getData(emailFromCookie, roleFromCookie);
     }
 
+    if (roleFromCookie) {
+      setUserRole(roleFromCookie);
+    }
+
   }, [cookies, userRole]);
 
   return (
@@ -117,21 +117,26 @@ export function Dashboard() {
               <tbody>
                 {horarios.map((horario, index) => (
                   <><tr key={index} className="hover:bg-gray-100">
-                      {horario.dia === "SEG" && (
+                      {horario.dia === 'SEG' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
-                      {horario.dia === "TER" && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                      {horario.dia === 'TER' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
-                      {horario.dia === "QUA" && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                      {horario.dia === 'QUA' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
-                      {horario.dia === "QUI" && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                      {horario.dia === 'QUI' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
-                      {horario.dia === "SEX" && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                      {horario.dia === 'SEX' && (
                         <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
                       )}
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
                     </tr>
                   </>
                 ))}

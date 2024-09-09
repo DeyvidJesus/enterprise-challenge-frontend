@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 export function Header() {
-  const [cookies, , removeCookie] = useCookies(["token"]);
+  const [cookies, , removeCookie] = useCookies(["token", "role", "email"]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const token = cookies["token"];
 
@@ -15,7 +15,9 @@ export function Header() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => {
-              removeCookie('token', { path: '/', domain: 'localhost' });
+              removeCookie("token", { path: '/', domain: 'localhost' });
+              removeCookie("role", { path: '/', domain: 'localhost' });
+              removeCookie("email", { path: '/', domain: 'localhost' });
               window.location.href = "/login"; // Redireciona para a página de login após o logout
               toast.dismiss(toastId); // Fecha o toast
             }}
