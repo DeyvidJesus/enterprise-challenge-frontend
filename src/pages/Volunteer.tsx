@@ -186,7 +186,7 @@ export const Volunteer: React.FC = () => {
         >
           <option value="">Selecione uma oficina</option>
           {oficinas.map((oficina: any) => (
-            <option key={oficina.id} value={oficina.nomeOficina}>
+            <option key={oficina.id} value={oficina.id}>
               {oficina.nomeOficina} - {oficina.horarios}
             </option>
           ))}
