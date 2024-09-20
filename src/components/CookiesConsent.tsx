@@ -7,6 +7,8 @@ const CookieConsent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    if (cookies.cookieConsent) return
+
     if (!cookies.cookieConsent) {
       setIsModalOpen(true);
     }
@@ -30,7 +32,7 @@ const CookieConsent: React.FC = () => {
         onRequestClose={closeModal}
         shouldCloseOnOverlayClick={false}
         shouldCloseOnEsc={false}
-        className="bg-white rounded shadow-lg p-4 flex flex-col w-1/2 h-28 mx-auto mt-auto mb-8"
+        className="bg-white rounded shadow-lg p-4 flex flex-col w-1/2 h-32 mx-auto mt-auto mb-8"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex"
       >
         <h2 className="font-semibold mb-1">Uso de Cookies</h2>

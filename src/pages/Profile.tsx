@@ -13,17 +13,17 @@ interface User {
 }
 
 const initialUserData: User = {
-  nomeCompleto: 'João da Silva',
-  email: 'joao@example.com',
-  numeroCelular: '99999-9999',
-  idade: 25,
-  conheceProgramacao: true,
-  senha: 'senha123',
+  nomeCompleto: '',
+  email: '',
+  numeroCelular: '',
+  idade: 0,
+  conheceProgramacao: false,
+  senha: '',
   role: 'Usuario',
 };
 
 const ProfilePage: React.FC = () => {
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["token", "email"]);
   const [user, setUser] = useState<User>(initialUserData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,10 +32,33 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const token = cookies["token"];
-    if (!token) {
+    const userEmail = cookies["email"];
+
+    if (!token || !userEmail) {
       window.location.assign("http://localhost:4200/");
+      return;
     }
-    
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          console.error('Erro ao buscar dados do usuário');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+      }
+    };
+
+    fetchUserData();
     Modal.setAppElement('body');
   }, [cookies]);
 
@@ -47,14 +70,54 @@ const ProfilePage: React.FC = () => {
     }));
   };
 
-  const handleDeleteAccount = () => {
-    console.log('Conta excluída permanentemente');
+  const handleDeleteAccount = async () => {
+    const token = cookies["token"];
+    const userEmail = cookies["email"];
+
+    try {
+      const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        console.log('Conta excluída permanentemente');
+        window.location.assign("http://localhost:4200/");
+      } else {
+        console.error('Erro ao excluir a conta');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir a conta:', error);
+    }
+
     closeModal();
   };
 
-  const handleSaveChanges = () => {
-    console.log('Dados salvos:', user);
-    closeModal();
+  const handleSaveChanges = async () => {
+    const token = cookies["token"];
+    const userEmail = cookies["email"];
+
+    try {
+      const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(user)
+      });
+
+      if (response.ok) {
+        console.log('Dados atualizados com sucesso');
+        closeModal();
+      } else {
+        console.error('Erro ao atualizar dados');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar dados:', error);
+    }
   };
 
   return (
@@ -70,17 +133,17 @@ const ProfilePage: React.FC = () => {
             <p><strong>Conhece Programação:</strong> {user.conheceProgramacao ? 'Sim' : 'Não'}</p>
           </>
         )}
-        <button 
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500" 
+        <button
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
           onClick={openModal}
         >
           Editar Perfil
         </button>
       </div>
 
-      <Modal 
-        isOpen={isModalOpen} 
-        onRequestClose={closeModal} 
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
         className="bg-white rounded shadow-lg p-6 w-full max-w-lg mx-auto my-auto"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
       >
@@ -88,31 +151,31 @@ const ProfilePage: React.FC = () => {
         <form>
           <label className="block mb-2">
             Nome Completo:
-            <input 
-              type="text" 
-              name="nomeCompleto" 
-              value={user.nomeCompleto} 
-              onChange={handleChange} 
+            <input
+              type="text"
+              name="nomeCompleto"
+              value={user.nomeCompleto}
+              onChange={handleChange}
               className="mt-1 block w-full border rounded p-2"
             />
           </label>
           <label className="block mb-2">
             Email:
-            <input 
-              type="email" 
-              name="email" 
-              value={user.email} 
-              onChange={handleChange} 
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
               className="mt-1 block w-full border rounded p-2"
             />
           </label>
           <label className="block mb-2">
             Número de Celular:
-            <input 
-              type="text" 
-              name="numeroCelular" 
-              value={user.numeroCelular} 
-              onChange={handleChange} 
+            <input
+              type="text"
+              name="numeroCelular"
+              value={user.numeroCelular}
+              onChange={handleChange}
               className="mt-1 block w-full border rounded p-2"
             />
           </label>
@@ -120,21 +183,21 @@ const ProfilePage: React.FC = () => {
             <>
               <label className="block mb-2">
                 Idade:
-                <input 
-                  type="number" 
-                  name="idade" 
-                  value={user.idade} 
-                  onChange={handleChange} 
+                <input
+                  type="number"
+                  name="idade"
+                  value={user.idade}
+                  onChange={handleChange}
                   className="mt-1 block w-full border rounded p-2"
                 />
               </label>
               <label className="block mb-2">
                 Conhece Programação:
-                <input 
-                  type="checkbox" 
-                  name="conheceProgramacao" 
-                  checked={user.conheceProgramacao} 
-                  onChange={handleChange} 
+                <input
+                  type="checkbox"
+                  name="conheceProgramacao"
+                  checked={user.conheceProgramacao}
+                  onChange={handleChange}
                   className="ml-2"
                 />
               </label>
@@ -142,31 +205,31 @@ const ProfilePage: React.FC = () => {
           )}
           <label className="block mb-4">
             Senha:
-            <input 
-              type="password" 
-              name="senha" 
-              value={user.senha} 
-              onChange={handleChange} 
+            <input
+              type="password"
+              name="senha"
+              value={user.senha}
+              onChange={handleChange}
               className="mt-1 block w-full border rounded p-2"
             />
           </label>
         </form>
 
         <div className="flex justify-between">
-          <button 
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500" 
+          <button
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
             onClick={handleSaveChanges}
           >
             Salvar Alterações
           </button>
-          <button 
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500" 
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
             onClick={handleDeleteAccount}
           >
             Excluir Conta
           </button>
-          <button 
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-200" 
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-200"
             onClick={closeModal}
           >
             Cancelar

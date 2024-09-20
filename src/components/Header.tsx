@@ -58,13 +58,15 @@ export function Header() {
             {token ? "Dashboard" : "Login"}
           </a>
           {token && (
-            <button 
-              aria-label="Logout"
-              className="py-2 px-4 text-white font-medium bg-blue-900 rounded hover:opacity-90 text-sm md:text-base ml-4"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <>
+              <a href="/dashboard/profile" className="font-semibold hover:brightness-90 text-base md:text-lg ml-4">Perfil</a><button
+                aria-label="Logout"
+                className="py-2 px-4 text-white font-medium bg-blue-900 rounded hover:opacity-90 text-sm md:text-base ml-4"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
           )}
         </div>
       </div>

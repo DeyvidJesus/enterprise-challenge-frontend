@@ -10,7 +10,7 @@ export const Volunteer: React.FC = () => {
     motivacao: "",
     oficinaId: "",
     senha: "",
-    termosAceitos: false, // Adicionando o campo para aceitar os termos
+    aceitaTermo: false, // Adicionando o campo para aceitar os termos
     roleId: 2,
   });
 
@@ -21,7 +21,7 @@ export const Volunteer: React.FC = () => {
     motivacao: "",
     oficinaId: "",
     senha: "",
-    termosAceitos: "", // Campo de erro para termos
+    aceitaTermo: "", // Campo de erro para termos
     roleId: "",
   });
 
@@ -71,7 +71,7 @@ export const Volunteer: React.FC = () => {
       motivacao: "",
       oficinaId: "",
       senha: "",
-      termosAceitos: "",
+      aceitaTermo: "",
       roleId: "",
     };
     let isValid = true;
@@ -116,8 +116,8 @@ export const Volunteer: React.FC = () => {
       isValid = false;
     }
 
-    if (!formData.termosAceitos) {
-      newErrors.termosAceitos = "Você deve aceitar os termos e condições.";
+    if (!formData.aceitaTermo) {
+      newErrors.aceitaTermo = "Você deve aceitar os termos e condições.";
       isValid = false;
     }
 
@@ -147,7 +147,7 @@ export const Volunteer: React.FC = () => {
             motivacao: "",
             oficinaId: "",
             senha: "",
-            termosAceitos: false,
+            aceitaTermo: false,
             roleId: 2,
           });
         } else {
@@ -283,7 +283,7 @@ export const Volunteer: React.FC = () => {
           className={`w-2/3 p-2 rounded border ${
             errors.senha ? "border-red-500" : "border-black"
           } mb-2`}
-          type="text"
+          type="password"
           name="senha"
           value={formData.senha}
           onChange={handleChange}
@@ -298,8 +298,8 @@ export const Volunteer: React.FC = () => {
         <label className="flex items-center mb-4">
           <input
             type="checkbox"
-            name="aceitouTermos"
-            checked={formData.termosAceitos}
+            name="aceitaTermo"
+            checked={formData.aceitaTermo}
             onChange={handleChange}
             className="mr-2"
           />
@@ -313,9 +313,9 @@ export const Volunteer: React.FC = () => {
             termos e condições
           </a>
         </label>
-        {errors.termosAceitos && (
+        {errors.aceitaTermo && (
           <span className="text-red-600 font-medium mb-2">
-            {errors.termosAceitos}
+            {errors.aceitaTermo}
           </span>
         )}
 

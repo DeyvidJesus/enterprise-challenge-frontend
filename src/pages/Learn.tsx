@@ -12,7 +12,7 @@ export const Learn: React.FC = () => {
     oficinaId: "",
     senha: "",
     roleId: 1,
-    aceitouTermos: false,
+    aceitaTermo: false,
   });
 
   const [errors, setErrors] = useState({
@@ -24,7 +24,7 @@ export const Learn: React.FC = () => {
     oficinaId: "",
     senha: "",
     roleId: "",
-    aceitouTermos: "",
+    aceitaTermo: "",
   });
 
   const [oficinas, setOficinas] = useState([]);
@@ -79,7 +79,7 @@ export const Learn: React.FC = () => {
       oficinaId: "",
       senha: "",
       roleId: "",
-      aceitouTermos: "",
+      aceitaTermo: "",
     };
     let isValid = true;
 
@@ -125,8 +125,8 @@ export const Learn: React.FC = () => {
       isValid = false;
     }
 
-    if (!formData.aceitouTermos) {
-      newErrors.aceitouTermos = "Você deve aceitar os termos e condições.";
+    if (!formData.aceitaTermo) {
+      newErrors.aceitaTermo = "Você deve aceitar os termos e condições.";
       isValid = false;
     }
 
@@ -157,7 +157,7 @@ export const Learn: React.FC = () => {
             oficinaId: "",
             senha: "",
             roleId: 1,
-            aceitouTermos: false,
+            aceitaTermo: false,
           });
         } else {
           console.error("Resposta do servidor:", response);
@@ -295,7 +295,7 @@ export const Learn: React.FC = () => {
           className={`w-full p-2 rounded border ${
             errors.senha ? "border-red-500" : "border-black"
           } mb-2`}
-          type="text"
+          type="password"
           name="senha"
           value={formData.senha}
           onChange={handleChange}
@@ -307,8 +307,8 @@ export const Learn: React.FC = () => {
         <label className="flex items-center mb-4">
           <input
             type="checkbox"
-            name="aceitouTermos"
-            checked={formData.aceitouTermos}
+            name="aceitaTermo"
+            checked={formData.aceitaTermo}
             onChange={handleChange}
             className="mr-2"
           />
@@ -322,9 +322,9 @@ export const Learn: React.FC = () => {
             termos e condições
           </a>
         </label>
-        {errors.aceitouTermos && (
+        {errors.aceitaTermo && (
           <span className="text-red-600 font-medium mb-2">
-            {errors.aceitouTermos}
+            {errors.aceitaTermo}
           </span>
         )}
 
