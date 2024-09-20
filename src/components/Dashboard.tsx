@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { Oficina } from "../types/entities";
+import { Horario } from "../types/calendar";
 
 export function Dashboard() {
-
   const [cookies] = useCookies(["token", "role", "email"]);
-  const [oficina, setOficina] = useState<Oficina>({ id: -1, nomeOficina: '', horarios: ''});
+  const [oficina, setOficina] = useState<Oficina>({ id: -1, nomeOficina: '', horarios: '' });
   const [userRole, setUserRole] = useState<string>('admin');
   const [userEmail, setUserEmail] = useState<string>('');
-  const [horarios, setHorarios] = useState<any[]>([]);
+  const [horarios, setHorarios] = useState<Horario[]>([]);
 
   useEffect(() => {
     const token = cookies["token"];
@@ -22,7 +22,6 @@ export function Dashboard() {
     if (emailFromCookie) {
       setUserEmail(emailFromCookie);
     }
-
   }, [cookies, userEmail]);
 
   useEffect(() => {
@@ -46,21 +45,18 @@ export function Dashboard() {
         ]);
 
         if (oficinasResponse.ok) {
+          const response = await oficinasResponse.json();
+          const horarioArray = response.horarios.split(",");
 
-          var response = await oficinasResponse.json();
-
-          let horario = response.horarios.split(",");
-
-          let dias = horario[0].split("/");
-          let horas = horario[1];
-          let horariosAulas: any[] = [];
-
-          dias.forEach((d: string) => horariosAulas.push({dia: d, hora: horas}));
+          const dias = horarioArray[0].split("/");
+          const horas = horarioArray[1];
+          const horariosAulas: Horario[] = dias.map((d: string) => ({
+            dia: d,
+            hora: horas
+          }));
 
           setHorarios(horariosAulas);
-
           setOficina(response);
-
         } else {
           toast.error('Falha ao carregar os dados.');
         }
@@ -77,12 +73,9 @@ export function Dashboard() {
     if (roleFromCookie) {
       setUserRole(roleFromCookie);
     }
-
   }, [cookies, userRole]);
 
   return (
-
-  
     <div className="flex flex-col p-6 bg-gray-100 w-screen max-w-full">
       {userRole === "ROLE_ALUNO" && (
         <h1 className="text-6xl text-gray-800 font-semibold mb-10 text-center">
@@ -94,15 +87,13 @@ export function Dashboard() {
           Dashboard Voluntário
         </h1>
       )}
-      {userRole === "ROLE_CONTATO" && (
-        <div>
-          
-        </div>
-      )}
+      {userRole === "ROLE_CONTATO" && <div></div>}
       {(userRole === "ROLE_ALUNO" || userRole === "ROLE_VOLUNTARIO") && (
         <>
           <div className="mb-10 overflow-auto" aria-labelledby="voluntarios-section">
-            <h2 id="voluntarios-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>Tabela de Horários</h2>
+            <h2 id="voluntarios-section" className="text-3xl text-gray-700 mb-4" role="heading" aria-level={2}>
+              Tabela de Horários
+            </h2>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" aria-label="Tabela de Horários">
               <thead className="bg-gray-200 text-gray-600">
                 <tr>
@@ -111,34 +102,41 @@ export function Dashboard() {
                   <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Quarta</th>
                   <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Quinta</th>
                   <th scope="col" className="py-2 px-4 border-b text-center whitespace-nowrap">Sexta</th>
-
                 </tr>
               </thead>
               <tbody>
                 {horarios.map((horario, index) => (
-                  <><tr key={index} className="hover:bg-gray-100">
-                      {horario.dia === 'SEG' && (
-                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
-                      )}
-                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
-                      {horario.dia === 'TER' && (
-                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
-                      )}
-                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
-                      {horario.dia === 'QUA' && (
-                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
-                      )}
-                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
-                      {horario.dia === 'QUI' && (
-                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
-                      )}
-                      <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
-                      {horario.dia === 'SEX' && (
-                        <td className="py-2 px-4 border-b text-center whitespace-nowrap">{horario.hora} - {oficina.nomeOficina}</td>
-                      )}
-                      {/* <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td> */}
-                    </tr>
-                  </>
+                  <tr key={index} className="hover:bg-gray-100">
+                    {horario.dia === 'SEG' && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap">
+                        {horario.hora} - {oficina.nomeOficina}
+                      </td>
+                    )}
+                    <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                    {horario.dia === 'TER' && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap">
+                        {horario.hora} - {oficina.nomeOficina}
+                      </td>
+                    )}
+                    <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                    {horario.dia === 'QUA' && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap">
+                        {horario.hora} - {oficina.nomeOficina}
+                      </td>
+                    )}
+                    <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                    {horario.dia === 'QUI' && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap">
+                        {horario.hora} - {oficina.nomeOficina}
+                      </td>
+                    )}
+                    <td className="py-2 px-4 border-b text-center whitespace-nowrap"></td>
+                    {horario.dia === 'SEX' && (
+                      <td className="py-2 px-4 border-b text-center whitespace-nowrap">
+                        {horario.hora} - {oficina.nomeOficina}
+                      </td>
+                    )}
+                  </tr>
                 ))}
               </tbody>
             </table>

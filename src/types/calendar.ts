@@ -5,3 +5,8 @@ export interface CalendarEvent {
   allDay?: boolean;
   end?: string;
 }
+
+export interface Horario {
+  dia: string;
+  hora: string;
+}
