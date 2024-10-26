@@ -15,9 +15,9 @@ export function Header() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => {
-              removeCookie("token", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
-              removeCookie("role", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
-              removeCookie("email", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
+              removeCookie("token", { path: '/'});
+              removeCookie("role", { path: '/'});
+              removeCookie("email", { path: '/'});
               window.location.href = "/login"; // Redireciona para a página de login após o logout
               toast.dismiss(toastId); // Fecha o toast
             }}
