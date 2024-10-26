@@ -41,7 +41,7 @@ const ProfilePage: React.FC = () => {
 
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`https://enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
+        const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -75,7 +75,7 @@ const ProfilePage: React.FC = () => {
     const userEmail = cookies["email"];
 
     try {
-      const response = await fetch(`https://enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
+      const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -101,7 +101,7 @@ const ProfilePage: React.FC = () => {
     const userEmail = cookies["email"];
 
     try {
-      const response = await fetch(`https://enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
+      const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

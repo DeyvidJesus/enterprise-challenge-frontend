@@ -36,7 +36,7 @@ export function Dashboard() {
     async function getData(emailFromCookie: string, roleFromCookie: string) {
       try {
         const [oficinasResponse] = await Promise.all([
-          fetch('https://enterprise-challenge-backend-production.up.railway.app/oficinas-por-usuario/' + encodeURI(emailFromCookie) + '?role=' + roleFromCookie, {
+          fetch('enterprise-challenge-backend-production.up.railway.app/oficinas-por-usuario/' + encodeURI(emailFromCookie) + '?role=' + roleFromCookie, {
             method: 'GET',
             headers: {
               'Authorization': 'Bearer ' + token

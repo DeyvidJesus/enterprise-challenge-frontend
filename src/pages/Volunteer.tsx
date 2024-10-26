@@ -30,7 +30,7 @@ export const Volunteer: React.FC = () => {
   useEffect(() => {
     const fetchOficinas = async () => {
       try {
-        const response = await fetch("https://enterprise-challenge-backend-production.up.railway.app/oficinas");
+        const response = await fetch("enterprise-challenge-backend-production.up.railway.app/oficinas");
         const data = await response.json();
         console.log("oficinas", data);
         setOficinas(data);
@@ -129,7 +129,7 @@ export const Volunteer: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch("https://https://enterprise-challenge-backend-production.up.railway.app/voluntarios", {
+        const response = await fetch("enterprise-challenge-backend-production.up.railway.app/voluntarios", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -38,7 +38,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('https://enterprise-challenge-backend-production.up.railway.app/usuarios/', {
+        const response = await fetch('enterprise-challenge-backend-production.up.railway.app/usuarios/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
