@@ -70,32 +70,6 @@ const ProfilePage: React.FC = () => {
     }));
   };
 
-  const handleDeleteAccount = async () => {
-    const token = cookies["token"];
-    const userEmail = cookies["email"];
-
-    try {
-      const response = await fetch(`https://enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        console.log('Conta excluída permanentemente');
-        window.location.assign("/");
-        
-      } else {
-        console.error('Erro ao excluir a conta');
-      }
-    } catch (error) {
-      console.error('Erro ao excluir a conta:', error);
-    }
-
-    closeModal();
-  };
-
   const handleSaveChanges = async () => {
     const token = cookies["token"];
     const userEmail = cookies["email"];
@@ -114,7 +88,8 @@ const ProfilePage: React.FC = () => {
         console.log('Dados atualizados com sucesso');
         closeModal();
       } else {
-        console.error('Erro ao atualizar dados');
+        const errorData = await response.json();
+        console.error('Erro ao atualizar dados:', errorData.message || response.statusText);
       }
     } catch (error) {
       console.error('Erro ao atualizar dados:', error);
@@ -204,41 +179,11 @@ const ProfilePage: React.FC = () => {
               </label>
             </>
           )}
-          <label className="block mb-4">
-            Senha:
-            <input
-              type="password"
-              name="senha"
-              value={user.senha}
-              onChange={handleChange}
-              className="mt-1 block w-full border rounded p-2"
-            />
-          </label>
         </form>
-
-        <div className="flex justify-between">
-          <button
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
-            onClick={handleSaveChanges}
-          >
-            Salvar Alterações
-          </button>
-          <button
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
-            onClick={handleDeleteAccount}
-          >
-            Excluir Conta
-          </button>
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-200"
-            onClick={closeModal}
-          >
-            Cancelar
-          </button>
-        </div>
+        <button onClick={handleSaveChanges} className="px-4 py-2 bg-green-600 text-white rounded">Salvar Alterações</button>
       </Modal>
     </div>
   );
 };
 
-export default ProfilePage;
+export default ProfilePage
