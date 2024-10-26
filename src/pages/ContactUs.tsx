@@ -73,7 +73,7 @@ export const ContactUs: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/contatos', {
+        const response = await fetch('enterprise-challenge-backend-production.up.railway.app/contatos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

@@ -13,21 +13,21 @@ const Login: React.FC = () => {
   useEffect(() => {
     const cookieValue = cookiesToken["token"];
     if (cookieValue) {
-      window.location.assign("http://localhost:4200/dashboard");
+      window.location.assign("/dashboard");
     }
   }, [cookiesToken]);
 
   useEffect(() => {
     const cookieValue = cookiesRole["role"];
     if (cookieValue) {
-      window.location.assign("http://localhost:4200/dashboard");
+      window.location.assign("/dashboard");
     }
   }, [cookiesRole]);
 
   useEffect(() => {
     const cookieValue = cookiesEmail["email"];
     if (cookieValue) {
-      window.location.assign("http://localhost:4200/dashboard");
+      window.location.assign("/dashboard");
     }
   }, [cookiesEmail]);
 
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/login', {
+        const response = await fetch('enterprise-challenge-backend-production.up.railway.app/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ const Login: React.FC = () => {
           setCookieToken('token', data.token, { path: '/' });
           setCookieRole('role', data.role, { path: '/'})
           setCookieEmail('email', username, { path: '/'})
-          window.location.assign("http://localhost:4200/dashboard");
+          window.location.assign("/dashboard");
         } else {
           const errorData = await response.json();
           toast.error(errorData.message || 'As credenciais informadas estão incorretas');

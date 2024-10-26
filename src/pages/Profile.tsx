@@ -35,13 +35,13 @@ const ProfilePage: React.FC = () => {
     const userEmail = cookies["email"];
 
     if (!token || !userEmail) {
-      window.location.assign("http://localhost:4200/");
+      window.location.assign("/");
       return;
     }
 
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+        const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -75,7 +75,7 @@ const ProfilePage: React.FC = () => {
     const userEmail = cookies["email"];
 
     try {
-      const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+      const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -84,7 +84,7 @@ const ProfilePage: React.FC = () => {
 
       if (response.ok) {
         console.log('Conta excluída permanentemente');
-        window.location.assign("http://localhost:4200/");
+        window.location.assign("/");
       } else {
         console.error('Erro ao excluir a conta');
       }
@@ -100,7 +100,7 @@ const ProfilePage: React.FC = () => {
     const userEmail = cookies["email"];
 
     try {
-      const response = await fetch(`http://localhost:8091/alunos/${userEmail}`, {
+      const response = await fetch(`enterprise-challenge-backend-production.up.railway.app/alunos/${userEmail}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ const Register: React.FC = () => {
   useEffect(() => {
     const cookieValue = cookies["token"];
     if (cookieValue) {
-      window.location.assign("http://localhost:4200/dashboard");
+      window.location.assign("/dashboard");
     }
   }, [cookies]);
 
@@ -38,7 +38,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:8091/usuarios/', {
+        const response = await fetch('enterprise-challenge-backend-production.up.railway.app/usuarios/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

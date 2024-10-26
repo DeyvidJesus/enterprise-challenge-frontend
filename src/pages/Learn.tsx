@@ -32,7 +32,7 @@ export const Learn: React.FC = () => {
   useEffect(() => {
     const fetchOficinas = async () => {
       try {
-        const response = await fetch("http://localhost:8091/oficinas");
+        const response = await fetch("enterprise-challenge-backend-production.up.railway.app/oficinas");
         const data = await response.json();
         setOficinas(data);
       } catch (error) {
@@ -138,7 +138,7 @@ export const Learn: React.FC = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch("http://localhost:8091/alunos", {
+        const response = await fetch("enterprise-challenge-backend-production.up.railway.app/alunos", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

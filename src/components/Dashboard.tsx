@@ -16,7 +16,7 @@ export function Dashboard() {
     const emailFromCookie = cookies["email"];
 
     if (!token) {
-      window.location.assign("http://localhost:4200/");
+      window.location.assign("/");
     }
 
     if (emailFromCookie) {
@@ -30,13 +30,13 @@ export function Dashboard() {
     const emailFromCookie = cookies["email"];
 
     if (!token) {
-      window.location.assign("http://localhost:4200/");
+      window.location.assign("/");
     }
 
     async function getData(emailFromCookie: string, roleFromCookie: string) {
       try {
         const [oficinasResponse] = await Promise.all([
-          fetch('http://localhost:8091/oficinas-por-usuario/' + encodeURI(emailFromCookie) + '?role=' + roleFromCookie, {
+          fetch('enterprise-challenge-backend-production.up.railway.app/oficinas-por-usuario/' + encodeURI(emailFromCookie) + '?role=' + roleFromCookie, {
             method: 'GET',
             headers: {
               'Authorization': 'Bearer ' + token

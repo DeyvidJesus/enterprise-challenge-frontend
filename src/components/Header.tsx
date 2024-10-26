@@ -15,9 +15,9 @@ export function Header() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => {
-              removeCookie("token", { path: '/', domain: 'localhost' });
-              removeCookie("role", { path: '/', domain: 'localhost' });
-              removeCookie("email", { path: '/', domain: 'localhost' });
+              removeCookie("token", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
+              removeCookie("role", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
+              removeCookie("email", { path: '/', domain: 'https://enterprise-challenge-frontend.vercel.app/' });
               window.location.href = "/login"; // Redireciona para a página de login após o logout
               toast.dismiss(toastId); // Fecha o toast
             }}
@@ -59,7 +59,10 @@ export function Header() {
           </a>
           {token && (
             <>
-              <a href="/dashboard/profile" className="font-semibold hover:brightness-90 text-base md:text-lg ml-4">Perfil</a><button
+              <a href="/dashboard/profile" className="font-semibold hover:brightness-90 text-base md:text-lg ml-4">
+                Perfil
+              </a>
+              <button
                 aria-label="Logout"
                 className="py-2 px-4 text-white font-medium bg-blue-900 rounded hover:opacity-90 text-sm md:text-base ml-4"
                 onClick={handleLogout}
