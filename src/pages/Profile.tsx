@@ -23,7 +23,7 @@ const initialUserData: User = {
 };
 
 const ProfilePage: React.FC = () => {
-  const [cookies, ,removeCookie] = useCookies(["token", "email"]);
+  const [cookies] = useCookies(["token", "email"]);
   const [user, setUser] = useState<User>(initialUserData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -85,8 +85,7 @@ const ProfilePage: React.FC = () => {
       if (response.ok) {
         console.log('Conta excluída permanentemente');
         window.location.assign("/");
-        removeCookie('token')
-        removeCookie('email')
+        
       } else {
         console.error('Erro ao excluir a conta');
       }
