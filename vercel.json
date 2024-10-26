@@ -1,13 +1,5 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/login", "destination": "/login.html" },
-    { "source": "/quem-somos", "destination": "/quem-somos.html" },
-    { "source": "/aprenda", "destination": "/aprenda.html" },
-    { "source": "/seja-voluntarios", "destination": "/seja-voluntarios.html" },
-    { "source": "/contato", "destination": "/contato.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/termos-e-condicoes", "destination": "/termos-e-condicoes.html" },
-    { "source": "/dashboard/profile", "destination": "/dashboard/profile.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
